@@ -1,0 +1,22 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - docker info && docker version
+
+test:
+  pre:
+    - docker build -t iscdev/iscloc .
+
+  override:
+    - docker run -d --name iscloc iscdev/iscloc /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output.out
+    - docker logs -f iscloc | tee -a ${CIRCLE_ARTIFACTS}/iscloc.log:
+          backgroud: true
+    - while true; do if grep "ISC Locator finished" -a ${CIRCLE_ARTIFACTS}/iscloc.log; then break; else sleep 1; fi done
+    # Test RSTT
+    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true iscdev/iscloc /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output_rstt.out
+    - docker logs -f iscloc_rstt | tee -a ${CIRCLE_ARTIFACTS}/iscloc_rstt.log:
+          backgroud: true
+    - while true; do if grep "RSTT ISC Locator finished" -a ${CIRCLE_ARTIFACTS}/iscloc_rstt.log; then break; else sleep 1; fi done

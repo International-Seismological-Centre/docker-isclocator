@@ -1,0 +1,3 @@
+iscloc:
+  image: iscdev/iscloc
+  command: /usr/src/iscloc/isf/isf_test_input1.dat /usr/src/iscloc/isf/my_output.out
