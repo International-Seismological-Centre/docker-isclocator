@@ -14,12 +14,16 @@
 
 This project was created to allow users on all platforms to be able to use ISC Locator without a need of compiling it. ISC Locator can be found and downloaded on our [offcial website](http://www.isc.ac.uk/iscbulletin/iscloc/).
 
-This container is built that **two** extra parameters provided to docker run will be passed directly to iscloc command. For example, if you run:
+[This container](https://hub.docker.com/r/iscdev/iscloc/) is built that **two** extra parameters provided to docker run will be passed directly to iscloc command. For example, if you run:
 
 	docker run [run options] iscdev/iscloc /data/in_file.dat /data/out_file.log
 
 you pass `/data/in_file.dat` and `/data/out_file.log` to iscloc program.
 
+---
+**For more information how to install and configure Docker [click here](https://docs.docker.com/engine/installation/)**
+
+---
 ### Required parameters
 Thic container need three parameters to be spcified in order to work correctly and save output to file. Two of which were mentioned above and one extra parameter for shared folder with host os and docker image.
 
@@ -45,7 +49,7 @@ options explenation:
 |`/data/isf_test_input.dat`| Input file that should be located in `~/folder_containing_files`|
 |`/data/my_output_file.out`| Output file which will be saved in `~/folder_containing_files/my_output_file.out`|
 
-### Using RSTT Version
+### RSTT Version
 ISC Locator is compiled with rstt support and can be defined by user to use that mode.
 Using ebvironmental variable `RSTT_SUPPORT` on `docker run` iscloc will use that mode.
 
