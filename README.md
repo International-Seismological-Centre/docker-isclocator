@@ -1,5 +1,7 @@
 # ISC Locator in a Docker
 
+[![Join the chat at https://gitter.im/International-Seismological-Centre/docker-isclocator](https://badges.gitter.im/International-Seismological-Centre/docker-isclocator.svg)](https://gitter.im/International-Seismological-Centre/docker-isclocator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![CircleCI Build Status](https://img.shields.io/circleci/project/International-Seismological-Centre/docker-isclocator/master.svg)](https://circleci.com/gh/International-Seismological-Centre/docker-isclocator/tree/master)
 [![GitHub Open Issues](https://img.shields.io/github/issues/International-Seismological-Centre/docker-isclocator.svg)](https://github.com/International-Seismological-Centre/docker-isclocator/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/International-Seismological-Centre/docker-isclocator.svg)](https://github.com/International-Seismological-Centre/docker-isclocator)
