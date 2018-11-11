@@ -1,5 +1,4 @@
-FROM centos:centos7
-MAINTAINER Przemyslaw Ozgo <linux@ozgo.info>
+FROM centos:7
 
 COPY compile-iscloc.sh /compile-iscloc.sh
 
