@@ -7,12 +7,10 @@ jobs:
   - stage: build&test
     script:
     - docker build -t ${IMAGE} .
-    - docker run -d --name iscloc ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat
-      /usr/src/iscloc/isf/my_output.out
+    - docker run -d --name iscloc ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output.out
     - while true; do if docker logs iscloc | grep "ISC Locator finished"; then break;
       else sleep 10; fi done
-    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat
-      /usr/src/iscloc/isf/my_output_rstt.out
+    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output_rstt.out
     - while true; do if docker logs iscloc_rstt | grep "RSTT ISC Locator finished";
       then break; else sleep 10; fi done
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -27,4 +25,4 @@ jobs:
     - docker push ${IMAGE}:latest
 notifications:
   slack:
-    secure: SkIZ4JzFpXFXuKzVLs1UXlLzx1rxVuBF64lewiz7cwj0/G9f9+TgODcN7hIs2LeSqGjQYCKWDVIVXQQ2gcwMV3msJuskArTdF85DT1LSBTbOBTQCyXMfqIdWXafUcmlzlakGXh28ecxTy3ujYpO1Jd/WS69+/aGSXNSmQsBHMouCtJ5SZer8bDml6pBYds8al6n6bTFhVipPXsPVzEtQ0lME20RXuQWekjx0lpF10VSBcxCVesgYhD/hHpYfYqosWxSbSVv1IbnXYell+8/7ohZV0p2YLwwPlxsliVtCEFRCxpAPXdnDn7QfgDNBILw+qiuD0tSrDWS9ntEuVqcQ+ebDLT8QSebyJlx7a/OqHe0M6cxYfjW2mkZ70S37tZj4UygjZAcWT0irqYye9nrp93DcTolTwfITtB/7kAzwv7GB7/EgbB4gsex6ydSPY6mz/XjQmBBDfcTPlhBW3LuWZS27Y52o3XTqNlOs/XqPi9PE0wNJDiZDCkr/Qmk57e5c947FWIEtdxNJDd3v4rTJoAUVpQ4EClrPDgOAvBTQuedugUyCjPcZ7Jiuddh/qQKztqQUJDgiNz1S4xz/l8n15uKzAeH2H9e1T1qHL0QhIhtKj61s5zULlSxZqh/NH9Dj3AUocSSk6M456lOP1v8/zGnBmymL/THA1/B6pZnAIFM=
+    secure: caDhOyKBpxV6YXFjqt+sa4KsyyKINaJ5oN5XS+SopNRyGG8lqn8lcl7tnXiApntxFSK1XRfl9AYT1SPd+Zmvdvyho2R5OU407oJ9SiPch/T7JKOqq7+cuH/9NwqXtCGUxGqludtxpZYvT3X7aqL+91caDn1lv23hrh7TPpKwiB3TFyknP3FYhuNUFagcu68CXQsSBfhvU5kEg/02rZhGUaiLwwzkOeqHivMypFvfX/78N3T134J3JdVMdtKuEQKqxOi+nPmYpW9FBc4fiQHICxcU0ZingBJG/nuQ2naQ5PodGOrMMjHQ5mjf1Gi3vQppnYv9KK1f/3npDsnxKMTj45szd20q4XdjAHi42MdiuUTQXUBttEBW2lWWWXcYxxj0KSVNioTRjBEuEeDeayL0MkSswJzwxKhCyWp9ybapC0QgWaXpDTDEkfHBFQElog7uXsuiVCn4n2dIEjy8FOYZOJ/Q5m9kHQjVEV08AMAA60y1lo5YwZqve6LmSTgyfXd4gSh6oLg7ooGP+Fa4ukB1mZSA7M+r75irE6LTAJd7kekzTFdEXMpyK/VKTo5+C9JqDL+qZXZbGnrQvlTgwu/QIf0b+940DLjXRjkigNTKes1oayLcqcTsa1qldJTPTrRmxwL0NH1EshyICOlGm2sFNCXiPDgbN5cP+ayRaCEmwmA=
