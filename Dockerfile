@@ -11,6 +11,7 @@ ENV SLBM_VERSION=3.0.4 \
 RUN \
   rpm --rebuilddb && yum clean all && \
   yum install -y \
+    wget \
     tar \
     make \
     automake \
@@ -26,12 +27,12 @@ RUN \
   curl -o /tmp/iscloc.tgz ftp://isc-mirror.iris.washington.edu/pub/iscloc/ISCloc.tar.gz && \
   mkdir -p /usr/src/iscloc && \
   tar zxf /tmp/iscloc.tgz -C /usr/src/iscloc --strip-components=1 && rm -f /tmp/iscloc.tgz && \
-  curl -o /tmp/slbm.tgz http://www.sandia.gov/rstt/downloads/SLBM_Root.${SLBM_VERSION}.Linux.tar.gz && \
+  wget -O /tmp/slbm.tgz http://www.sandia.gov/rstt/downloads/SLBM_Root.${SLBM_VERSION}.Linux.tar.gz && \
   mkdir -p /usr/src/slbm && \
   tar zxf /tmp/slbm.tgz -C /usr/src/slbm --strip-components=1 && rm -f /tmp/slbm.tgz && \
   cd /usr/src/slbm && make clean_objs && make geotess && make cc && make c && /usr/src/slbm/environment_variables.sh && \
   /compile-iscloc.sh && rm -f /compile-iscloc.sh && \
-  yum remove -y make automake gcc gcc-c++ postgresql-devel lapack-devel blas-devel ncurses-devel && \
+  yum remove -y wget make automake gcc gcc-c++ postgresql-devel lapack-devel blas-devel ncurses-devel && \
   yum clean all
 
 COPY container-files /
