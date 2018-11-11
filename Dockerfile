@@ -24,7 +24,7 @@ RUN \
     blas \
     blas-devel \
     ncurses-devel && \
-  curl -o --ftp-pasv /tmp/iscloc.tgz ftp://isc-mirror.iris.washington.edu/pub/iscloc/ISCloc.tar.gz && \
+  curl -o /tmp/iscloc.tgz ftp://isc-mirror.iris.washington.edu/pub/iscloc/ISCloc.tar.gz && \
   mkdir -p /usr/src/iscloc && \
   tar zxf /tmp/iscloc.tgz -C /usr/src/iscloc --strip-components=1 && rm -f /tmp/iscloc.tgz && \
   wget -O /tmp/slbm.tgz http://www.sandia.gov/rstt/downloads/SLBM_Root.${SLBM_VERSION}.Linux.tar.gz && \
