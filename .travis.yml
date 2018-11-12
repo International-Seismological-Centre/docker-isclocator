@@ -1,25 +1,29 @@
 services:
 - docker
+
 notifications:
   slack:
     secure: caDhOyKBpxV6YXFjqt+sa4KsyyKINaJ5oN5XS+SopNRyGG8lqn8lcl7tnXiApntxFSK1XRfl9AYT1SPd+Zmvdvyho2R5OU407oJ9SiPch/T7JKOqq7+cuH/9NwqXtCGUxGqludtxpZYvT3X7aqL+91caDn1lv23hrh7TPpKwiB3TFyknP3FYhuNUFagcu68CXQsSBfhvU5kEg/02rZhGUaiLwwzkOeqHivMypFvfX/78N3T134J3JdVMdtKuEQKqxOi+nPmYpW9FBc4fiQHICxcU0ZingBJG/nuQ2naQ5PodGOrMMjHQ5mjf1Gi3vQppnYv9KK1f/3npDsnxKMTj45szd20q4XdjAHi42MdiuUTQXUBttEBW2lWWWXcYxxj0KSVNioTRjBEuEeDeayL0MkSswJzwxKhCyWp9ybapC0QgWaXpDTDEkfHBFQElog7uXsuiVCn4n2dIEjy8FOYZOJ/Q5m9kHQjVEV08AMAA60y1lo5YwZqve6LmSTgyfXd4gSh6oLg7ooGP+Fa4ukB1mZSA7M+r75irE6LTAJd7kekzTFdEXMpyK/VKTo5+C9JqDL+qZXZbGnrQvlTgwu/QIf0b+940DLjXRjkigNTKes1oayLcqcTsa1qldJTPTrRmxwL0NH1EshyICOlGm2sFNCXiPDgbN5cP+ayRaCEmwmA=
+
 env:
 - IMAGE='iscdev/iscloc'
+
 jobs:
   include:
   - stage: build&test
     script:
+    - mkdir -p workdir
     - docker build -t ${IMAGE} .
-    - docker run -d --name iscloc ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output.out
+    - docker run -d --name iscloc -v ./workdir:/workdir ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /workdir/my_output.out
     - while true; do if docker logs iscloc | grep "ISC Locator finished"; then break;
       else sleep 10; fi done
     # Print content of out file
-    - docker exec -i iscloc bash -c "cat /usr/src/iscloc/isf/my_output.out"
-    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output_rstt.out
+    - cat workdir/my_output.out
+    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true -v ./workdir:/workdir ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /workdir/my_output_rstt.out
     - while true; do if docker logs iscloc_rstt | grep "RSTT ISC Locator finished";
       then break; else sleep 60; fi done
     # Print content of out file
-    - docker exec -i iscloc_rstt bash -c "cat /usr/src/iscloc/isf/my_output_rstt.out"
+    - cat workdir/my_output_rstt.out
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - docker tag ${IMAGE}:latest ${IMAGE}:stage
     - docker push ${IMAGE}:stage
