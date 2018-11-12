@@ -1,5 +1,8 @@
 services:
 - docker
+notifications:
+  slack:
+    secure: caDhOyKBpxV6YXFjqt+sa4KsyyKINaJ5oN5XS+SopNRyGG8lqn8lcl7tnXiApntxFSK1XRfl9AYT1SPd+Zmvdvyho2R5OU407oJ9SiPch/T7JKOqq7+cuH/9NwqXtCGUxGqludtxpZYvT3X7aqL+91caDn1lv23hrh7TPpKwiB3TFyknP3FYhuNUFagcu68CXQsSBfhvU5kEg/02rZhGUaiLwwzkOeqHivMypFvfX/78N3T134J3JdVMdtKuEQKqxOi+nPmYpW9FBc4fiQHICxcU0ZingBJG/nuQ2naQ5PodGOrMMjHQ5mjf1Gi3vQppnYv9KK1f/3npDsnxKMTj45szd20q4XdjAHi42MdiuUTQXUBttEBW2lWWWXcYxxj0KSVNioTRjBEuEeDeayL0MkSswJzwxKhCyWp9ybapC0QgWaXpDTDEkfHBFQElog7uXsuiVCn4n2dIEjy8FOYZOJ/Q5m9kHQjVEV08AMAA60y1lo5YwZqve6LmSTgyfXd4gSh6oLg7ooGP+Fa4ukB1mZSA7M+r75irE6LTAJd7kekzTFdEXMpyK/VKTo5+C9JqDL+qZXZbGnrQvlTgwu/QIf0b+940DLjXRjkigNTKes1oayLcqcTsa1qldJTPTrRmxwL0NH1EshyICOlGm2sFNCXiPDgbN5cP+ayRaCEmwmA=
 env:
 - IMAGE='iscdev/iscloc'
 jobs:
@@ -23,6 +26,3 @@ jobs:
     - docker pull ${IMAGE}:stage
     - docker tag ${IMAGE}:stage ${IMAGE}:latest
     - docker push ${IMAGE}:latest
-notifications:
-  slack:
-    secure: caDhOyKBpxV6YXFjqt+sa4KsyyKINaJ5oN5XS+SopNRyGG8lqn8lcl7tnXiApntxFSK1XRfl9AYT1SPd+Zmvdvyho2R5OU407oJ9SiPch/T7JKOqq7+cuH/9NwqXtCGUxGqludtxpZYvT3X7aqL+91caDn1lv23hrh7TPpKwiB3TFyknP3FYhuNUFagcu68CXQsSBfhvU5kEg/02rZhGUaiLwwzkOeqHivMypFvfX/78N3T134J3JdVMdtKuEQKqxOi+nPmYpW9FBc4fiQHICxcU0ZingBJG/nuQ2naQ5PodGOrMMjHQ5mjf1Gi3vQppnYv9KK1f/3npDsnxKMTj45szd20q4XdjAHi42MdiuUTQXUBttEBW2lWWWXcYxxj0KSVNioTRjBEuEeDeayL0MkSswJzwxKhCyWp9ybapC0QgWaXpDTDEkfHBFQElog7uXsuiVCn4n2dIEjy8FOYZOJ/Q5m9kHQjVEV08AMAA60y1lo5YwZqve6LmSTgyfXd4gSh6oLg7ooGP+Fa4ukB1mZSA7M+r75irE6LTAJd7kekzTFdEXMpyK/VKTo5+C9JqDL+qZXZbGnrQvlTgwu/QIf0b+940DLjXRjkigNTKes1oayLcqcTsa1qldJTPTrRmxwL0NH1EshyICOlGm2sFNCXiPDgbN5cP+ayRaCEmwmA=
