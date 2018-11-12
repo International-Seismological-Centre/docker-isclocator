@@ -24,7 +24,7 @@ RUN \
     blas \
     blas-devel \
     ncurses-devel && \
-  curl --progress-bar --ipv4 --connect-timeout 8 --max-time 120 --retry 128 --ftp-ssl --disable-epsv --ftp-pasv -o /tmp/iscloc.tgz ftp://anonymous@isc-mirror.iris.washington.edu/pub/iscloc/ISCloc.tar.gz && \
+  curl --progress-bar --ipv4 --connect-timeout 8 --retry-delay 10 --max-time 120 --retry 128 --ftp-ssl --disable-epsv --ftp-pasv -o /tmp/iscloc.tgz ftp://anonymous@isc-mirror.iris.washington.edu/pub/iscloc/ISCloc.tar.gz && \
   mkdir -p /usr/src/iscloc && \
   tar zxf /tmp/iscloc.tgz -C /usr/src/iscloc --strip-components=1 && rm -f /tmp/iscloc.tgz && \
   sed -i 's|/export/home/istvan/ISClocRelease2.2.6|/usr/src/iscloc|g' /usr/src/iscloc/etc/iscloc/config.txt && \
