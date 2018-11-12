@@ -1,28 +1,22 @@
 services:
 - docker
-
-notifications:
-  slack:
-    secure: NkyE9qcc9m9l1ssK6KnTyCzecjF7HJZ3CjI070okvY4Adr9EZhzzr3C7YLc+PaOu+KMH//mQLCIzf97es+gENZGB7amhjrM1MXDbCFCAyBf8jYcj3TnUFRiPVmq6w9TgxzOzcYty0EwXPC16IWXKwlap8z/rQgw0foztAiXkn77gjXiPX5kL3PPsM/+GNjRkcIsMzF338+eI+zObrN3lNGAEl7WNkO9J+suKCCxkFOlnfusk1eVfIAquvPTbzQY4nDiw2d3EKKK7lCSjg1H9Zo0XtJoSg7XciMFJH17pBm9oiRTOJ4SVqklLJGjYQufNd0g0sSsF4Y9i43nvXn0T86CkbO86ndwF/e9R1VPSF5MbImA1wZskKjSZ1aJky9QV/5yWVCRjozAIO911j4IBs3q6TNq/NsvrDVM+rL29hf0VmF52FXlhT52H1w59yPu7MpQGVVm+vCyTXQXOVkk1wZjZBYEsen8h1w4HYJfS8CSHTrZgXkd6PfuNQcS4CBtz26Fu7OAZF8/MAJ/cUGLpbWPEKU+cYHpcIslvXG06nMh+/JeslDR24BqmRY5NJDAQn1eNYzfRqAicqrgWtV0CtOXvRoH9BVPmN1TWCBbLjOi4edQihI+A5v3kdJePpbXjxU+aK1/mQVYemM2+I0e6FfkeMIuSLhmkYTGob0ew8Ak=
-
 env:
 - IMAGE='iscdev/iscloc'
-
 jobs:
   include:
   - stage: build&test
     script:
     - mkdir -p workdir
     - docker build -t ${IMAGE} .
-    - docker run -d --name iscloc -v ${PWD}/workdir:/workdir ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /workdir/my_output.out
+    - docker run -d --name iscloc -v ${PWD}/workdir:/workdir ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat
+      /workdir/my_output.out
     - while true; do if docker logs iscloc | grep "ISC Locator finished"; then break;
       else sleep 10; fi done
-    # Print content of out file
     - head -n 50  workdir/my_output.out
-    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true -v ${PWD}/workdir:/workdir ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /workdir/my_output_rstt.out
+    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true -v ${PWD}/workdir:/workdir
+      ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /workdir/my_output_rstt.out
     - while true; do if docker logs iscloc_rstt | grep "RSTT ISC Locator finished";
       then break; else sleep 60; fi done
-    # Print content of out file
     - head -n 50 workdir/my_output_rstt.out
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - docker tag ${IMAGE}:latest ${IMAGE}:stage
@@ -34,3 +28,7 @@ jobs:
     - docker pull ${IMAGE}:stage
     - docker tag ${IMAGE}:stage ${IMAGE}:latest
     - docker push ${IMAGE}:latest
+notifications:
+  slack:
+    rooms:
+      secure: BTo8WbruG5kphcCQmDbxvqTvW+vRjPpD7acRP9cuwhihzUlRzHlXN4ToNZ55CIHMFHpKiSiddsjQYu5xF3qDVfVTlO8lf4u6Z0FZc9tGxAW5DAN9S7wn7ZaHZK1EDrNabeG7wDliTXt9gmxqMXYkRppP1mYkiKgvL0Y+0yKC5v4mrOpYorYt6RABNwTfVOU8/CmRIk9rg90RQNfQSn0WjJXRPm571POgJpHejg5CkufrThpvNWEh42LrUl7QJvjBxgHpPWbVPqeZiyHhjGnTCavDZUH+8RI9u8wSbvPmogPmkGUHU5VGCBaVkpb4C8Q82AiJEV0RZfWp9RnpbpKFi6agsSrOQeR8Y2mwW9CnLmZLA7rG+CiWbLyvRalK4MshbnhGh1yfBRyAx1Av8vdymzG8wDWpwHPjACb/l53K3CZ1oTKiTHF+BDTLj0fYw17xn7OJXYQz7bA0dCceVo0NtRk/s8dtSVZMcqqBxjHdZ5rSNKr8NuuGlSU/U5yCmHZAijXy1MmkK+LVZtC3l77CRvlJHUavB4ZuhiSwb4glvbgbTYoCcNkAnZjkSEuTooMRFs91aME5pYdxfMg4ccZoucactK2iIjXeCqmXNL6CE6i4WFNSHwiB9pXLUJeutHU548BO0b7rcnGxHTriEYtkuZtS7WpOuP4RVg8xOFCRQ0M=
