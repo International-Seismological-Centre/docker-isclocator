@@ -15,7 +15,7 @@ jobs:
       else sleep 10; fi done
     - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /usr/src/iscloc/isf/my_output_rstt.out
     - while true; do if docker logs iscloc_rstt | grep "RSTT ISC Locator finished";
-      then break; else sleep 10; fi done
+      then break; else sleep 60; fi done
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - docker tag ${IMAGE}:latest ${IMAGE}:stage
     - docker push ${IMAGE}:stage
