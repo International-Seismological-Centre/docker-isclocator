@@ -28,7 +28,7 @@ RUN \
   mkdir -p /usr/src/iscloc && \
   tar zxf /tmp/iscloc.tgz -C /usr/src/iscloc --strip-components=1 && rm -f /tmp/iscloc.tgz && \
   sed -i 's|/export/home/istvan/ISClocRelease2.2.6|/usr/src/iscloc|g' /usr/src/iscloc/etc/iscloc/config.txt && \
-  wget -O /tmp/slbm.tgz http://www.sandia.gov/rstt/downloads/SLBM_Root.${SLBM_VERSION}.Linux.tar.gz && \
+  wget -q -O /tmp/slbm.tgz http://www.sandia.gov/rstt/downloads/SLBM_Root.${SLBM_VERSION}.Linux.tar.gz && \
   mkdir -p /usr/src/slbm && \
   tar zxf /tmp/slbm.tgz -C /usr/src/slbm --strip-components=1 && rm -f /tmp/slbm.tgz && \
   cd /usr/src/slbm && make clean_objs && make geotess && make cc && make c && /usr/src/slbm/environment_variables.sh && \
