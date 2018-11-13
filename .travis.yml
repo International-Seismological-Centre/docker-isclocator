@@ -1,0 +1,34 @@
+services:
+- docker
+env:
+- IMAGE='iscdev/iscloc'
+jobs:
+  include:
+  - stage: build&test
+    script:
+    - mkdir -p workdir
+    - docker build -t ${IMAGE} .
+    - docker run -d --name iscloc -v ${PWD}/workdir:/workdir ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat
+      /workdir/my_output.out
+    - while true; do if docker logs iscloc | grep "ISC Locator finished"; then break;
+      else sleep 10; fi done
+    - head -n 50  workdir/my_output.out
+    - docker run -d --name iscloc_rstt -e RSTT_SUPPORT=true -v ${PWD}/workdir:/workdir
+      ${IMAGE} /usr/src/iscloc/isf/isf_test_input2.dat /workdir/my_output_rstt.out
+    - while true; do if docker logs iscloc_rstt | grep "RSTT ISC Locator finished";
+      then break; else sleep 60; fi done
+    - head -n 50 workdir/my_output_rstt.out
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - docker tag ${IMAGE}:latest ${IMAGE}:stage
+    - docker push ${IMAGE}:stage
+  - stage: deploy
+    if: branch = master
+    script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - docker pull ${IMAGE}:stage
+    - docker tag ${IMAGE}:stage ${IMAGE}:latest
+    - docker push ${IMAGE}:latest
+notifications:
+  slack:
+    rooms:
+      secure: IHgtAMGhIHkbbhSCqAvx4k/CZ0ldFx+f/zQl6D9spqI8NbyGUamHH7meOviU8ZIzvWj8zRyRnuZHezM384Y9KQsXuZDhDch/kpNlqbhOcPxloXAaGSFNrBdddqvXuTwVyzowZr8cF5TpnbJq6Ej4w5gQqNv7PW2t/unLj4kZF0tuGJlG675V/Au61Gp6zOInS6D7mAyorKij74doEKYP6/+0GtcpXMOS4wXFeBKbU2eNbXtAbVmXWG83rjSiyJwxVW+BpQrFm++9A7+nfdH0RFmmCNraIODp7NMsKnQAIaQ9AXQWWA6Ibe7yfSuz5QLeKeJcgiKUNkN/sPWsBTxc63Zq707waZfylI9dA2thk5kfz3IFarcW0R8RLL8687/+0lrSsm018gyyU9bdB3XwjDqMUYSNPCcwC+wtEhrBM59zl3N3piHA6Xs6bVexU3Mkh0P9q+2/vMHcdaD1vNg6Kk7WkFfd4fnh8E0JcErFriUTlmkf2+KWjlTFdEzlZXMypfl444mA43ARGy1d3o6Z5MN2RS2EnmVPECHZchuLARItITm92zvC43rIkV6SoVbXhIchHdSB0R4spow2Wh4V4sgYvvGZmnEDJc1cbAmEBQE/VGTReMCO85D1TZRNYBCfMguSs5bD6/+hngubZTHfXYmgQco32aSMr59TbnklhXA=
